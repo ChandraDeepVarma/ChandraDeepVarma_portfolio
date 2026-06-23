@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Logo from "@/components/Logo";
 
 export default function AdminLogin() {
   const [username, setUsername] = useState("");
@@ -56,7 +57,9 @@ export default function AdminLogin() {
       
       <div style={styles.card}>
         <div style={styles.header}>
-          <div style={styles.logo}>AM.</div>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "16px" }}>
+            <Logo initials="CDVN" style={{ cursor: "default" }} />
+          </div>
           <h1 style={styles.title}>Admin Portal</h1>
           <p style={styles.subtitle}>Sign in to manage your portfolio content dynamically</p>
         </div>

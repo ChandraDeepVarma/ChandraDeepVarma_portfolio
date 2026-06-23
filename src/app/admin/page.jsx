@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { THEMES } from "@/lib/themes";
+import Logo from "@/components/Logo";
 
 function convertToWebP(file) {
   return new Promise((resolve, reject) => {
@@ -589,8 +590,8 @@ export default function AdminDashboard() {
 
       {/* Top Bar */}
       <header style={styles.topbar}>
-        <div style={styles.logo}>
-          <span style={{ fontSize: "1.4rem", fontWeight: "900" }}>AM.</span>
+        <div style={{ ...styles.logo, display: "flex", alignItems: "center", gap: "8px" }}>
+          <Logo initials={data?.hero?.avatarInitials || "CDVN"} style={{ cursor: "default" }} />
           <span style={styles.logoDivider}></span>
           <span style={styles.logoTitle}>Control Center</span>
         </div>

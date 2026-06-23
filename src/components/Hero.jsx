@@ -26,6 +26,25 @@ export default function Hero({ data }) {
             {data.eyebrow}
           </div>
         )}
+        
+        {/* Mobile-only avatar */}
+        <div className="hero-mobile-avatar-container">
+          <div className="hero-mobile-avatar">
+            {data.avatarUrl ? (
+              <img
+                src={data.avatarUrl}
+                alt={data.nameLine1 + " " + data.nameLine2}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            ) : (
+              <div className="avatar-monogram">{data.avatarInitials}</div>
+            )}
+          </div>
+          {data.openToWork && (
+            <div className="mobile-badge-dot" title="Open to work" />
+          )}
+        </div>
+
         <h1 className="hero-name">
           <span className="line1">{data.nameLine1}</span>
           <span className="line2">{data.nameLine2}</span>

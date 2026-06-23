@@ -44,6 +44,9 @@ async function getPortfolioData() {
 export default async function Home() {
   const portfolioData = await getPortfolioData();
   const theme = getTheme(portfolioData.themeId || "midnight-violet");
+  
+  const initials = portfolioData.hero?.avatarInitials || "CDVN";
+  const fullName = `${portfolioData.hero?.nameLine1 || ""} ${portfolioData.hero?.nameLine2 || ""}`.replace(/\s+/g, ' ').trim();
 
   return (
     <>
@@ -75,7 +78,7 @@ export default async function Home() {
       <ClientAnimations />
       <BackgroundCanvas />
       <CustomCursor />
-      <Navbar />
+      <Navbar initials={initials} />
       <main>
         <Hero data={portfolioData.hero} />
         <div className="section-divider" />
@@ -97,7 +100,7 @@ export default async function Home() {
         <div className="section-divider" />
         <Contact data={portfolioData.hero} />
       </main>
-      <Footer />
+      <Footer initials={initials} name={fullName} />
     </>
   );
 }

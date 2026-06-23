@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Logo from "./Logo";
 
-export default function Navbar() {
+export default function Navbar({ initials = "CDVN" }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -17,6 +18,10 @@ export default function Navbar() {
 
   const openMobile = () => setMobileOpen(true);
   const closeMobile = () => setMobileOpen(false);
+  
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <>
@@ -35,7 +40,9 @@ export default function Navbar() {
 
       {/* Main Navbar */}
       <nav id="navbar" className={scrolled ? "scrolled" : ""}>
-        <div className="nav-logo">AM.</div>
+        <div onClick={scrollToTop}>
+          <Logo initials={initials} />
+        </div>
         <div className="nav-links">
           <a href="#about">About</a>
           <a href="#skills">Skills</a>

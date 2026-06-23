@@ -1,6 +1,8 @@
 "use client";
 
-export default function Footer() {
+import Logo from "./Logo";
+
+export default function Footer({ initials = "CDVN", name = "Chandra Deep Varma Namburi" }) {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -9,7 +11,9 @@ export default function Footer() {
     <footer>
       <div className="footer-inner">
         <div className="footer-top">
-          <div className="footer-logo">AM.</div>
+          <div onClick={scrollToTop}>
+            <Logo initials={initials} />
+          </div>
           <nav className="footer-nav">
             <a href="#about">About</a>
             <a href="#skills">Skills</a>
@@ -38,7 +42,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="footer-bottom">
-          <div className="footer-copy">© 2026 Alex Morgan. All rights reserved.</div>
+          <div className="footer-copy">© 2026 {name}. All rights reserved.</div>
           <div className="footer-made">
             Designed & built with <span>♥</span> in San Francisco
           </div>
