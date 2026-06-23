@@ -1,0 +1,422 @@
+{
+  "themeId": "midnight-violet",
+  "hero": {
+    "eyebrow": "Available for opportunities",
+    "nameLine1": "Chandra  Deep Varma ",
+    "nameLine2": "Namburi",
+    "title": "Full Stack Developer",
+    "tagline": "I craft scalable digital products from concept to deployment — combining precise engineering with thoughtful design to build things that actually matter.",
+    "github": "#",
+    "linkedin": "#",
+    "twitter": "#",
+    "email": "alex@alexmorgan.dev",
+    "cvUrl": "#",
+    "avatarInitials": "AM",
+    "avatarUrl": "",
+    "yearsExp": "6+",
+    "openToWork": true
+  },
+  "about": {
+    "titleLine1": "Turning ideas into",
+    "titleLine2": "digital reality",
+    "p1": "I'm a full stack developer with 6+ years of experience building production-grade web applications for startups, scale-ups, and enterprise clients across fintech, SaaS, and e-commerce verticals.",
+    "p2": "My approach sits at the intersection of clean engineering and product thinking — I don't just write code, I ask why we're building it and make sure the answer is good.",
+    "focus": "Building high-performance React applications with Next.js, distributed backend systems with Node.js & Go, and cloud-native infrastructure on AWS.",
+    "stats": {
+      "exp": 6,
+      "projects": 80,
+      "tech": 30,
+      "clients": 40
+    }
+  },
+  "skills": {
+    "categories": [
+      {
+        "icon": "⬡",
+        "colorClass": "violet",
+        "title": "Frontend",
+        "subtitle": "UI / Interaction",
+        "tags": [
+          "React",
+          "Next.js",
+          "TypeScript",
+          "Framer Motion",
+          "Tailwind",
+          "Three.js",
+          "WebGL",
+          "GraphQL"
+        ]
+      },
+      {
+        "icon": "◈",
+        "colorClass": "cyan",
+        "title": "Backend",
+        "subtitle": "APIs / Services",
+        "tags": [
+          "Node.js",
+          "Go",
+          "Python",
+          "Fastify",
+          "Express",
+          "REST",
+          "gRPC",
+          "Redis"
+        ]
+      },
+      {
+        "icon": "◇",
+        "colorClass": "blue",
+        "title": "Database",
+        "subtitle": "Data / Storage",
+        "tags": [
+          "PostgreSQL",
+          "MongoDB",
+          "Prisma",
+          "Supabase",
+          "MySQL",
+          "ElasticSearch",
+          "DynamoDB"
+        ]
+      },
+      {
+        "icon": "◉",
+        "colorClass": "green",
+        "title": "DevOps & Tools",
+        "subtitle": "Infra / Workflow",
+        "tags": [
+          "AWS",
+          "Docker",
+          "Kubernetes",
+          "GitHub Actions",
+          "Terraform",
+          "Vercel",
+          "Figma"
+        ]
+      }
+    ]
+  },
+  "experience": {
+    "jobs": [
+      {
+        "date": "Jan 2023 — Present",
+        "role": "Senior Full Stack Engineer",
+        "company": "Veritas Labs · San Francisco, CA (Remote)",
+        "desc": "Lead engineer on a B2B SaaS platform serving 200k+ users. Architected a real-time collaboration engine, reduced API response times by 64%, and led a team of 4 engineers through a complete frontend rebuild.",
+        "tags": [
+          "Next.js",
+          "Go",
+          "PostgreSQL",
+          "Redis",
+          "AWS"
+        ]
+      },
+      {
+        "date": "Mar 2021 — Dec 2022",
+        "role": "Full Stack Developer",
+        "company": "Nexus Digital · New York, NY",
+        "desc": "Built and maintained core product features for a fintech startup processing $2M+ in daily transactions. Delivered a payments dashboard, webhook infrastructure, and a public API consumed by 300+ third-party integrations.",
+        "tags": [
+          "React",
+          "Node.js",
+          "Stripe",
+          "MongoDB",
+          "Docker"
+        ]
+      },
+      {
+        "date": "Jun 2019 — Feb 2021",
+        "role": "Frontend Developer",
+        "company": "Studiohaus · London, UK (Remote)",
+        "desc": "Developed high-performance marketing sites and e-commerce storefronts for agency clients. Introduced component-driven architecture that cut delivery time by 40% across subsequent projects.",
+        "tags": [
+          "React",
+          "TypeScript",
+          "Shopify",
+          "Framer Motion"
+        ]
+      },
+      {
+        "date": "Aug 2018 — May 2019",
+        "role": "Junior Web Developer",
+        "company": "Pixel Craft Agency · Austin, TX",
+        "desc": "Started career building client websites and internal tooling. Gained strong foundations in semantic HTML, CSS architecture, and JavaScript fundamentals while supporting senior developers on larger projects.",
+        "tags": [
+          "JavaScript",
+          "Vue.js",
+          "PHP",
+          "WordPress"
+        ]
+      }
+    ]
+  },
+  "projects": {
+    "projects": [
+      {
+        "num": "Project 01",
+        "title": "Orbit Analytics Dashboard",
+        "desc": "Real-time SaaS analytics platform with custom data pipeline, live charts, and team collaboration features serving 50k+ monthly active users.",
+        "tags": [
+          "Next.js",
+          "Go",
+          "TimescaleDB",
+          "WebSockets"
+        ],
+        "bgClass": "pg1",
+        "liveUrl": "#",
+        "sourceUrl": "#"
+      },
+      {
+        "num": "Project 02",
+        "title": "Vaultpay Fintech Platform",
+        "desc": "End-to-end payments infrastructure with KYC verification, multi-currency wallet, and a clean merchant dashboard — processing $1M+ in test volume.",
+        "tags": [
+          "React",
+          "Node.js",
+          "Stripe",
+          "PostgreSQL"
+        ],
+        "bgClass": "pg2",
+        "liveUrl": "#",
+        "sourceUrl": "#"
+      },
+      {
+        "num": "Project 03",
+        "title": "Synapse AI Workspace",
+        "desc": "Collaborative AI-powered note-taking app with semantic search, real-time multiplayer editing, and LLM-assisted writing built on OpenAI's API.",
+        "tags": [
+          "Next.js",
+          "Liveblocks",
+          "OpenAI",
+          "Supabase"
+        ],
+        "bgClass": "pg3",
+        "liveUrl": "#",
+        "sourceUrl": "#"
+      },
+      {
+        "num": "Project 04",
+        "title": "Portis CMS Platform",
+        "desc": "Headless CMS with a visual block editor, multi-locale support, and a CDN-optimized delivery API — serving 10M+ content requests per month.",
+        "tags": [
+          "React",
+          "Fastify",
+          "MongoDB",
+          "Cloudfront"
+        ],
+        "bgClass": "pg4",
+        "liveUrl": "#",
+        "sourceUrl": "#"
+      },
+      {
+        "num": "Project 05",
+        "title": "Fleetline Logistics App",
+        "desc": "Operational dashboard for a logistics company with live GPS tracking, route optimization, driver management, and automated invoice generation.",
+        "tags": [
+          "React Native",
+          "Node.js",
+          "Redis",
+          "Mapbox"
+        ],
+        "bgClass": "pg5",
+        "liveUrl": "#",
+        "sourceUrl": "#"
+      },
+      {
+        "num": "Project 06",
+        "title": "Linkflow API Gateway",
+        "desc": "High-throughput API gateway with rate limiting, JWT auth, request transformation, and a developer portal — handling 5k+ requests per second at peak.",
+        "tags": [
+          "Go",
+          "Redis",
+          "Docker",
+          "Kubernetes"
+        ],
+        "bgClass": "pg6",
+        "liveUrl": "#",
+        "sourceUrl": "#"
+      }
+    ]
+  },
+  "caseStudies": {
+    "cases": [
+      {
+        "num": "01",
+        "tag": "Fintech · Payments",
+        "title": "Rebuilding a payment core under live traffic",
+        "desc": "Vaultpay's monolithic payments handler was becoming a liability — single-threaded, no retry logic, and no observability. I redesigned it as an event-driven microservice with idempotency guarantees, dead-letter queues, and full Datadog instrumentation — deployed with zero downtime using a strangler-fig migration.",
+        "metrics": [
+          {
+            "val": "99.98%",
+            "label": "Uptime"
+          },
+          {
+            "val": "-82%",
+            "label": "Error rate"
+          },
+          {
+            "val": "3× faster",
+            "label": "Throughput"
+          }
+        ],
+        "tech": [
+          "Node.js + BullMQ",
+          "PostgreSQL",
+          "Redis Streams",
+          "Datadog APM",
+          "AWS SQS"
+        ]
+      },
+      {
+        "num": "02",
+        "tag": "SaaS · Performance",
+        "title": "From 8s load to sub-second: a frontend overhaul",
+        "desc": "Orbit Analytics was shipping 3MB+ JS bundles and re-rendering entire pages on every filter change. I introduced route-level code splitting, React Server Components, aggressive caching via SWR, and a virtualized table renderer for million-row datasets — without a single API change.",
+        "metrics": [
+          {
+            "val": "94→",
+            "label": "Lighthouse score"
+          },
+          {
+            "val": "-91%",
+            "label": "Bundle size"
+          },
+          {
+            "val": "+34%",
+            "label": "Retention"
+          }
+        ],
+        "tech": [
+          "Next.js RSC",
+          "SWR + Suspense",
+          "TanStack Virtual",
+          "Webpack analysis",
+          "Vercel Edge"
+        ]
+      },
+      {
+        "num": "03",
+        "tag": "AI · Product",
+        "title": "Real-time AI collaboration at scale",
+        "desc": "Synapse needed AI suggestions to stream into a shared document that 50+ users could be editing simultaneously — without conflicts or latency spikes. I built a CRDT-based sync layer with streamed LLM insertions and optimistic UI, then deployed it on edge infrastructure for <80ms global latency.",
+        "metrics": [
+          {
+            "val": "<80ms",
+            "label": "Global latency"
+          },
+          {
+            "val": "50+",
+            "label": "Concurrent users"
+          },
+          {
+            "val": "0",
+            "label": "Conflict rate"
+          }
+        ],
+        "tech": [
+          "Yjs CRDT",
+          "OpenAI Streaming",
+          "Liveblocks",
+          "Cloudflare Durable Objects",
+          "React Suspense"
+        ]
+      }
+    ]
+  },
+  "services": {
+    "services": [
+      {
+        "icon": "⬡",
+        "type": "v1",
+        "title": "Full Stack Development",
+        "desc": "End-to-end product engineering — from database schema and API design to pixel-perfect frontend with seamless deployment pipelines."
+      },
+      {
+        "icon": "◈",
+        "type": "v2",
+        "title": "API Design & Integration",
+        "desc": "Clean, well-documented REST and GraphQL APIs with authentication, rate limiting, webhooks, and developer experience built in from day one."
+      },
+      {
+        "icon": "◇",
+        "type": "v3",
+        "title": "Performance Engineering",
+        "desc": "Systematic audits and targeted fixes for slow frontends and overloaded backends — from Core Web Vitals to database query optimization."
+      },
+      {
+        "icon": "◉",
+        "type": "v1",
+        "title": "Database Architecture",
+        "desc": "Schema design, query optimization, migrations, and data modeling for relational and document databases — at startup and enterprise scale."
+      },
+      {
+        "icon": "⊞",
+        "type": "v2",
+        "title": "Cloud Infrastructure",
+        "desc": "AWS architecture, containerization with Docker and Kubernetes, CI/CD pipelines, and infrastructure-as-code with Terraform."
+      },
+      {
+        "icon": "⊕",
+        "type": "v3",
+        "title": "Technical Consulting",
+        "desc": "Architecture reviews, technology decisions, code audits, and engineering team guidance for startups making critical technical choices."
+      }
+    ]
+  },
+  "certifications": {
+    "certs": [
+      {
+        "issuer": "Amazon Web Services",
+        "name": "AWS Solutions Architect — Professional",
+        "year": "2024",
+        "icon": "☁",
+        "color": "rgba(255,153,0,0.1)"
+      },
+      {
+        "issuer": "Google Cloud",
+        "name": "Professional Cloud Developer",
+        "year": "2023",
+        "icon": "◈",
+        "color": "rgba(66,133,244,0.1)"
+      },
+      {
+        "issuer": "Meta",
+        "name": "Meta Front-End Developer Professional",
+        "year": "2022",
+        "icon": "⬡",
+        "color": "rgba(124,58,237,0.15)"
+      },
+      {
+        "issuer": "HashiCorp",
+        "name": "Terraform Associate (003)",
+        "year": "2024",
+        "icon": "◇",
+        "color": "rgba(6,182,212,0.1)"
+      },
+      {
+        "issuer": "The Linux Foundation",
+        "name": "Certified Kubernetes Administrator",
+        "year": "2023",
+        "icon": "◉",
+        "color": "rgba(59,130,246,0.1)"
+      },
+      {
+        "issuer": "MongoDB University",
+        "name": "MongoDB Certified Developer",
+        "year": "2022",
+        "icon": "⊞",
+        "color": "rgba(16,185,129,0.1)"
+      }
+    ]
+  },
+  "resume": {
+    "title": "Everything in one place",
+    "desc": "A comprehensive overview of my experience, technical skills, education, and projects — formatted for both humans and ATS systems.",
+    "highlights": [
+      "6+ years of professional experience",
+      "80+ projects shipped to production",
+      "6 industry certifications",
+      "Contributions to open source projects",
+      "Available as PDF, optimized for ATS"
+    ]
+  }
+}
