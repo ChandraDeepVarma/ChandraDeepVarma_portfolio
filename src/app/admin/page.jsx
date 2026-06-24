@@ -468,58 +468,6 @@ export default function AdminDashboard() {
     });
   };
 
-  // Case Studies Mutators
-  const handleCaseChange = (index, field, val) => {
-    const updated = [...data.caseStudies.cases];
-    updated[index] = { ...updated[index], [field]: val };
-    setData({
-      ...data,
-      caseStudies: { ...data.caseStudies, cases: updated },
-    });
-  };
-
-  const handleCaseMetricChange = (caseIndex, metricIndex, field, val) => {
-    const updatedCases = [...data.caseStudies.cases];
-    const updatedMetrics = [...updatedCases[caseIndex].metrics];
-    updatedMetrics[metricIndex] = { ...updatedMetrics[metricIndex], [field]: val };
-    updatedCases[caseIndex] = { ...updatedCases[caseIndex], metrics: updatedMetrics };
-    setData({
-      ...data,
-      caseStudies: { ...data.caseStudies, cases: updatedCases },
-    });
-  };
-
-  const handleCaseTechChange = (caseIndex, techIndex, val) => {
-    const updatedCases = [...data.caseStudies.cases];
-    const updatedTech = [...updatedCases[caseIndex].tech];
-    updatedTech[techIndex] = val;
-    updatedCases[caseIndex] = { ...updatedCases[caseIndex], tech: updatedTech };
-    setData({
-      ...data,
-      caseStudies: { ...data.caseStudies, cases: updatedCases },
-    });
-  };
-
-  const addCaseTech = (index) => {
-    const updatedCases = [...data.caseStudies.cases];
-    const updatedTech = [...updatedCases[index].tech, "New Tech"];
-    updatedCases[index] = { ...updatedCases[index], tech: updatedTech };
-    setData({
-      ...data,
-      caseStudies: { ...data.caseStudies, cases: updatedCases },
-    });
-  };
-
-  const removeCaseTech = (index, techIndex) => {
-    const updatedCases = [...data.caseStudies.cases];
-    const updatedTech = updatedCases[index].tech.filter((_, i) => i !== techIndex);
-    updatedCases[index] = { ...updatedCases[index], tech: updatedTech };
-    setData({
-      ...data,
-      caseStudies: { ...data.caseStudies, cases: updatedCases },
-    });
-  };
-
   // Services Mutators
   const handleServiceChange = (index, field, val) => {
     const updated = [...data.services.services];
@@ -1070,67 +1018,6 @@ export default function AdminDashboard() {
               </div>
             )}
 
-            {/* CASE STUDIES */}
-            {activeTab === "caseStudies" && (
-              <div style={styles.formContainer}>
-                <h2 style={styles.sectionTitle}>Case Studies Deep Dives</h2>
-                {data.caseStudies.cases.map((cs, idx) => (
-                  <div key={idx} style={styles.listItemCard}>
-                    <h4 style={{ color: "#22d3ee", fontSize: "1.1rem", fontWeight: "700", marginBottom: "16px" }}>Case Study {cs.num || idx + 1}</h4>
-                    <div style={styles.formGrid}>
-                      <div style={styles.fieldGroup}>
-                        <label style={styles.fieldLabel}>Number Label</label>
-                        <input style={styles.fieldInput} type="text" value={cs.num || ""} onChange={(e) => handleCaseChange(idx, "num", e.target.value)} />
-                      </div>
-                      <div style={styles.fieldGroup}>
-                        <label style={styles.fieldLabel}>Industry / Tagline Badge</label>
-                        <input style={styles.fieldInput} type="text" value={cs.tag || ""} onChange={(e) => handleCaseChange(idx, "tag", e.target.value)} />
-                      </div>
-                      <div style={{ ...styles.fieldGroup, gridColumn: "1 / span 2" }}>
-                        <label style={styles.fieldLabel}>Title</label>
-                        <input style={styles.fieldInput} type="text" value={cs.title || ""} onChange={(e) => handleCaseChange(idx, "title", e.target.value)} />
-                      </div>
-                      <div style={{ ...styles.fieldGroup, gridColumn: "1 / span 2" }}>
-                        <label style={styles.fieldLabel}>Description</label>
-                        <textarea style={styles.fieldTextarea} value={cs.desc || ""} onChange={(e) => handleCaseChange(idx, "desc", e.target.value)} />
-                      </div>
-                      
-                      {/* Metrics editors */}
-                      <div style={{ ...styles.fieldGroup, gridColumn: "1 / span 2" }}>
-                        <label style={styles.fieldLabel}>Metrics</label>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "16px" }}>
-                          {cs.metrics.map((m, mIdx) => (
-                            <div key={mIdx} style={{ padding: "16px", background: "rgba(10, 10, 20, 0.7)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.06)" }}>
-                              <input style={{ ...styles.fieldInput, marginBottom: "10px", width: "100%" }} type="text" placeholder="Value (e.g. 99.9%)" value={m.val || ""} onChange={(e) => handleCaseMetricChange(idx, mIdx, "val", e.target.value)} />
-                              <input style={{ ...styles.fieldInput, width: "100%" }} type="text" placeholder="Label (e.g. Uptime)" value={m.label || ""} onChange={(e) => handleCaseMetricChange(idx, mIdx, "label", e.target.value)} />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Tech used editors */}
-                      <div style={{ ...styles.fieldGroup, gridColumn: "1 / span 2" }}>
-                        <label style={styles.fieldLabel}>Technology Stack items</label>
-                        <div style={styles.tagList}>
-                          {cs.tech.map((t, tIdx) => (
-                            <div key={tIdx} style={styles.tagItem}>
-                              <input
-                                style={styles.tagInput}
-                                type="text"
-                                value={t}
-                                onChange={(e) => handleCaseTechChange(idx, tIdx, e.target.value)}
-                              />
-                              <button style={styles.tagRemoveBtn} onClick={() => removeCaseTech(idx, tIdx)}>×</button>
-                            </div>
-                          ))}
-                          <button style={styles.btnTagAdd} onClick={() => addCaseTech(idx)}>+ Add Tech</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
 
             {/* SERVICES */}
             {activeTab === "services" && (
@@ -1343,13 +1230,7 @@ const tabIcons = {
       <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
     </svg>
   ),
-  caseStudies: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="18" y1="20" x2="18" y2="10"></line>
-      <line x1="12" y1="20" x2="12" y2="4"></line>
-      <line x1="6" y1="20" x2="6" y2="14"></line>
-    </svg>
-  ),
+
   services: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
@@ -1390,7 +1271,6 @@ const navigationGroups = [
     title: "Portfolio & Work",
     items: [
       { id: "projects", label: "Selected Projects", icon: tabIcons.projects },
-      { id: "caseStudies", label: "Case Studies", icon: tabIcons.caseStudies },
       { id: "experience", label: "Work Timeline", icon: tabIcons.experience },
     ],
   },

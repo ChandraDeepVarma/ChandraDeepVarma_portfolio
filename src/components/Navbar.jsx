@@ -27,6 +27,9 @@ export default function Navbar({ initials = "CDVN" }) {
     <>
       {/* Mobile Menu */}
       <div className={`mobile-menu ${mobileOpen ? "open" : ""}`} id="mobileMenu">
+        <div className="mobile-logo" onClick={closeMobile}>
+          <Logo initials={initials} />
+        </div>
         <button className="mobile-close" id="mobileClose" onClick={closeMobile}>
           ✕
         </button>
@@ -48,13 +51,12 @@ export default function Navbar({ initials = "CDVN" }) {
           <a href="#skills">Skills</a>
           <a href="#experience">Experience</a>
           <a href="#projects">Projects</a>
-          <a href="#cases">Case Studies</a>
           <a href="#services">Services</a>
           <a href="#contact" className="nav-cta">
             Let's Talk
           </a>
         </div>
-        <div className="nav-hamburger" id="hamburger" onClick={openMobile}>
+        <div className={`nav-hamburger ${mobileOpen ? "menu-open" : ""}`} id="hamburger" onClick={openMobile}>
           <span />
           <span />
           <span />

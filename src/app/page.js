@@ -6,7 +6,6 @@ import About from "@/components/About";
 import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
 import Projects from "@/components/Projects";
-import CaseStudies from "@/components/CaseStudies";
 import Services from "@/components/Services";
 import Certifications from "@/components/Certifications";
 import Resume from "@/components/Resume";
@@ -89,8 +88,6 @@ export default async function Home() {
         <Experience data={portfolioData.experience} />
         <div className="section-divider" />
         <Projects data={portfolioData.projects} />
-        <div className="section-divider" />
-        <CaseStudies data={portfolioData.caseStudies} />
         <div className="section-divider" />
         <Services data={portfolioData.services} />
         <div className="section-divider" />
