@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
+import clientPromise from "@/lib/mongodb";
 
 // Cloudinary SDK automatically picks up the CLOUDINARY_URL from the environment variables,
 // but let's configure it explicitly to be absolutely safe.
@@ -29,13 +30,44 @@ export async function POST(request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
+    const isImage = file.type.startsWith("image/");
+
+    if (!isImage) {
+      // Save directly to MongoDB uploads collection
+      const client = await clientPromise;
+      const db = client.db("portfolio");
+      
+      await db.collection("uploads").replaceOne(
+        { _id: "resume_pdf" },
+        {
+          _id: "resume_pdf",
+          data: buffer,
+          filename: file.name,
+          mimeType: file.type,
+          uploadedAt: new Date()
+        },
+        { upsert: true }
+      );
+
+      return NextResponse.json({
+        success: true,
+        url: "/api/resume/download",
+        public_id: "resume_pdf"
+      });
+    }
+
+    const resourceType = "image";
+    const uploadOptions = {
+      resource_type: resourceType,
+      folder: "portfolio",
+      use_filename: true,
+      unique_filename: true,
+    };
+
     // Upload to Cloudinary using standard stream
     const uploadResult = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream(
-        {
-          resource_type: "auto",
-          folder: "portfolio",
-        },
+        uploadOptions,
         (error, result) => {
           if (error) {
             reject(error);

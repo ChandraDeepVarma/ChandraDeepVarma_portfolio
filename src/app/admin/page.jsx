@@ -148,6 +148,8 @@ function FileUploader({ value, onChange, label, accept = "*" }) {
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [data, setData] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [selectedMessage, setSelectedMessage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ text: "", type: "" });
@@ -168,7 +170,16 @@ export default function AdminDashboard() {
             .then((r) => r.json())
             .then((d) => {
               setData(d);
-              setLoading(false);
+              // Fetch inbox messages
+              fetch("/api/contact")
+                .then((r) => r.ok ? r.json() : [])
+                .then((m) => {
+                  setMessages(m);
+                  setLoading(false);
+                })
+                .catch(() => {
+                  setLoading(false);
+                });
             })
             .catch(() => {
               setMessage({ text: "Failed to load portfolio content.", type: "error" });
@@ -180,6 +191,50 @@ export default function AdminDashboard() {
         router.push("/admin/login");
       });
   }, [router]);
+
+  const handleToggleRead = async (msgId, currentRead) => {
+    try {
+      const res = await fetch("/api/contact", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: msgId, read: !currentRead }),
+      });
+      if (res.ok) {
+        const updated = messages.map(m => m._id === msgId ? { ...m, read: !currentRead } : m);
+        setMessages(updated);
+        if (selectedMessage && selectedMessage._id === msgId) {
+          setSelectedMessage({ ...selectedMessage, read: !currentRead });
+        }
+      } else {
+        const err = await res.json();
+        setMessage({ text: err.error || "Failed to update message.", type: "error" });
+      }
+    } catch (err) {
+      setMessage({ text: "Failed to update message.", type: "error" });
+    }
+  };
+
+  const handleDeleteMessage = async (msgId) => {
+    if (!window.confirm("Are you sure you want to delete this message?")) return;
+    try {
+      const res = await fetch(`/api/contact?id=${msgId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setMessages(messages.filter(m => m._id !== msgId));
+        if (selectedMessage && selectedMessage._id === msgId) {
+          setSelectedMessage(null);
+        }
+        setMessage({ text: "Message deleted successfully.", type: "success" });
+        setTimeout(() => setMessage({ text: "", type: "" }), 4000);
+      } else {
+        const err = await res.json();
+        setMessage({ text: err.error || "Failed to delete message.", type: "error" });
+      }
+    } catch (err) {
+      setMessage({ text: "Failed to delete message.", type: "error" });
+    }
+  };
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -242,6 +297,13 @@ export default function AdminDashboard() {
         ...data.about,
         stats: { ...data.about.stats, [field]: Number(val) },
       },
+    });
+  };
+
+  const updateContact = (field, val) => {
+    setData({
+      ...data,
+      contact: { ...data.contact, [field]: val },
     });
   };
 
@@ -453,6 +515,8 @@ export default function AdminDashboard() {
       year: "Year",
       icon: "◈",
       color: "rgba(124,58,237,0.15)",
+      certFile: "",
+      certLink: "",
     };
     setData({
       ...data,
@@ -1012,6 +1076,24 @@ export default function AdminDashboard() {
                         <label style={styles.fieldLabel}>Badge Background Color Style (CSS string)</label>
                         <input style={styles.fieldInput} type="text" value={cert.color || ""} onChange={(e) => handleCertChange(idx, "color", e.target.value)} />
                       </div>
+                      <div style={{ ...styles.fieldGroup, gridColumn: "1 / span 2" }}>
+                        <FileUploader
+                          label="Direct Certificate Upload (Image or PDF)"
+                          value={cert.certFile || ""}
+                          onChange={(val) => handleCertChange(idx, "certFile", val)}
+                          accept="image/*,application/pdf"
+                        />
+                      </div>
+                      <div style={{ ...styles.fieldGroup, gridColumn: "1 / span 2" }}>
+                        <label style={styles.fieldLabel}>External Link (Google Drive / Credly / URL)</label>
+                        <input
+                          style={styles.fieldInput}
+                          type="text"
+                          value={cert.certLink || ""}
+                          onChange={(e) => handleCertChange(idx, "certLink", e.target.value)}
+                          placeholder="e.g. https://drive.google.com/..."
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -1059,7 +1141,7 @@ export default function AdminDashboard() {
             {/* RESUME / EDUCATION */}
             {activeTab === "resume" && (
               <div style={styles.formContainer}>
-                <h2 style={styles.sectionTitle}>Resume Section Highlights</h2>
+                <h2 style={styles.sectionTitle}>Resume Section & PDF Options</h2>
                 <div style={styles.formGrid}>
                   <div style={{ ...styles.fieldGroup, gridColumn: "1 / span 2" }}>
                     <label style={styles.fieldLabel}>Headline</label>
@@ -1068,6 +1150,18 @@ export default function AdminDashboard() {
                   <div style={{ ...styles.fieldGroup, gridColumn: "1 / span 2" }}>
                     <label style={styles.fieldLabel}>Description Text</label>
                     <textarea style={styles.fieldTextarea} value={data.resume.desc} onChange={(e) => updateResume("desc", e.target.value)} />
+                  </div>
+                  <div style={styles.fieldGroup}>
+                    <FileUploader
+                      label="Download Resume PDF"
+                      value={data.resume.cvUrl || ""}
+                      onChange={(val) => updateResume("cvUrl", val)}
+                      accept=".pdf,application/pdf"
+                    />
+                  </div>
+                  <div style={styles.fieldGroup}>
+                    <label style={styles.fieldLabel}>View Online Resume Link</label>
+                    <input style={styles.fieldInput} type="text" value={data.resume.viewUrl || ""} onChange={(e) => updateResume("viewUrl", e.target.value)} placeholder="e.g. Google Drive link or Web page URL" />
                   </div>
                   <div style={{ ...styles.fieldGroup, gridColumn: "1 / span 2" }}>
                     <label style={styles.fieldLabel}>Highlights List</label>
@@ -1087,6 +1181,245 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* CONTACT DETAILS */}
+            {activeTab === "contact" && (
+              <div style={styles.formContainer}>
+                <h2 style={styles.sectionTitle}>Contact & Social Details</h2>
+                <div style={styles.formGrid}>
+                  <div style={styles.fieldGroup}>
+                    <label style={styles.fieldLabel}>Email Address</label>
+                    <input style={styles.fieldInput} type="email" value={data.contact?.email || ""} onChange={(e) => updateContact("email", e.target.value)} />
+                  </div>
+                  <div style={styles.fieldGroup}>
+                    <label style={styles.fieldLabel}>Phone Number</label>
+                    <input style={styles.fieldInput} type="text" value={data.contact?.phone || ""} onChange={(e) => updateContact("phone", e.target.value)} />
+                  </div>
+                  <div style={{ ...styles.fieldGroup, gridColumn: "1 / span 2" }}>
+                    <label style={styles.fieldLabel}>Location</label>
+                    <input style={styles.fieldInput} type="text" value={data.contact?.location || ""} onChange={(e) => updateContact("location", e.target.value)} />
+                  </div>
+                  <div style={styles.fieldGroup}>
+                    <label style={styles.fieldLabel}>GitHub URL</label>
+                    <input style={styles.fieldInput} type="text" value={data.contact?.github || ""} onChange={(e) => updateContact("github", e.target.value)} />
+                  </div>
+                  <div style={styles.fieldGroup}>
+                    <label style={styles.fieldLabel}>LinkedIn URL</label>
+                    <input style={styles.fieldInput} type="text" value={data.contact?.linkedin || ""} onChange={(e) => updateContact("linkedin", e.target.value)} />
+                  </div>
+                  <div style={styles.fieldGroup}>
+                    <label style={styles.fieldLabel}>Twitter URL</label>
+                    <input style={styles.fieldInput} type="text" value={data.contact?.twitter || ""} onChange={(e) => updateContact("twitter", e.target.value)} />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* INBOX MESSAGES */}
+            {activeTab === "messages" && (
+              <div>
+                <div style={{ marginBottom: "32px" }}>
+                  <h2 style={styles.sectionTitle}>Inbox Messages</h2>
+                  <p style={{ color: "#94a3b8", marginTop: "-16px", fontSize: "0.95rem" }}>
+                    View and manage direct messages submitted by visitors on your contact page.
+                  </p>
+                </div>
+
+                {messages.length === 0 ? (
+                  <div style={{
+                    background: "rgba(10, 10, 20, 0.3)",
+                    border: "1px dashed rgba(255, 255, 255, 0.1)",
+                    borderRadius: "16px",
+                    padding: "60px 40px",
+                    textAlign: "center",
+                    color: "#94a3b8",
+                  }}>
+                     <span style={{ fontSize: "2.5rem", display: "block", marginBottom: "16px" }}>✉</span>
+                     <p style={{ fontWeight: "600", fontSize: "1.1rem", color: "#f8fafc" }}>Your inbox is empty</p>
+                     <p style={{ fontSize: "0.85rem", color: "#64748b", marginTop: "6px" }}>When visitors send messages via your contact form, they will appear here.</p>
+                  </div>
+                ) : (
+                  <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "350px 1fr",
+                    gap: "28px",
+                    minHeight: "500px",
+                    alignItems: "stretch",
+                  }}>
+                    {/* Left Pane: Messages list */}
+                    <div style={{
+                      background: "rgba(10, 10, 20, 0.4)",
+                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      borderRadius: "16px",
+                      overflowY: "auto",
+                      maxHeight: "600px",
+                      padding: "16px",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "12px",
+                    }}>
+                      {messages.map((msg) => {
+                        const isSelected = selectedMessage && selectedMessage._id === msg._id;
+                        const date = new Date(msg.createdAt).toLocaleDateString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit"
+                        });
+                        return (
+                          <div
+                            key={msg._id}
+                            onClick={() => {
+                              setSelectedMessage(msg);
+                              if (!msg.read) {
+                                handleToggleRead(msg._id, false);
+                              }
+                            }}
+                            style={{
+                              background: isSelected ? "rgba(139, 92, 246, 0.12)" : "rgba(10, 10, 20, 0.6)",
+                              border: isSelected ? "1px solid #8b5cf6" : "1px solid rgba(255, 255, 255, 0.04)",
+                              borderRadius: "12px",
+                              padding: "16px",
+                              cursor: "pointer",
+                              transition: "all 0.2s ease",
+                              position: "relative",
+                            }}
+                          >
+                            {!msg.read && (
+                              <span style={{
+                                position: "absolute",
+                                top: "16px",
+                                right: "16px",
+                                width: "8px",
+                                height: "8px",
+                                borderRadius: "50%",
+                                backgroundColor: "#3b82f6",
+                                boxShadow: "0 0 10px #3b82f6",
+                              }} />
+                            )}
+                            <div style={{
+                              fontSize: "0.75rem",
+                              color: "#64748b",
+                              fontWeight: "600",
+                              marginBottom: "4px"
+                            }}>{date}</div>
+                            <div style={{
+                              fontSize: "0.95rem",
+                              fontWeight: msg.read ? "600" : "700",
+                              color: msg.read ? "#cbd5e1" : "#f8fafc",
+                              marginBottom: "4px",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}>{msg.name}</div>
+                            <div style={{
+                              fontSize: "0.85rem",
+                              fontWeight: msg.read ? "500" : "600",
+                              color: msg.read ? "#94a3b8" : "#e2e8f0",
+                              marginBottom: "8px",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}>{msg.subject}</div>
+                            <div style={{
+                              fontSize: "0.8rem",
+                              color: "#64748b",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                            }}>{msg.message}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Right Pane: Message details */}
+                    <div style={{
+                      background: "rgba(10, 10, 20, 0.2)",
+                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      borderRadius: "16px",
+                      padding: "32px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: selectedMessage ? "space-between" : "center",
+                      alignItems: selectedMessage ? "stretch" : "center",
+                      textAlign: selectedMessage ? "left" : "center",
+                    }}>
+                      {selectedMessage ? (
+                        <>
+                          <div>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "24px", borderBottom: "1px solid rgba(255, 255, 255, 0.05)", paddingBottom: "20px" }}>
+                              <div>
+                                <h3 style={{ fontSize: "1.25rem", fontWeight: "700", color: "#f8fafc", margin: 0 }}>
+                                  {selectedMessage.subject}
+                                </h3>
+                                <div style={{ display: "flex", gap: "12px", alignItems: "center", marginTop: "8px", fontSize: "0.85rem", color: "#94a3b8" }}>
+                                  <span style={{ fontWeight: "600", color: "#f8fafc" }}>From: {selectedMessage.name}</span>
+                                  <span>&lt;<a href={`mailto:${selectedMessage.email}`} style={{ color: "#3b82f6", textDecoration: "underline" }}>{selectedMessage.email}</a>&gt;</span>
+                                </div>
+                              </div>
+                              <div style={{ fontSize: "0.8rem", color: "#64748b", fontWeight: "600" }}>
+                                {new Date(selectedMessage.createdAt).toLocaleString(undefined, {
+                                  dateStyle: "medium",
+                                  timeStyle: "short"
+                                })}
+                              </div>
+                            </div>
+
+                            <div style={{
+                              background: "rgba(10, 10, 20, 0.4)",
+                              border: "1px solid rgba(255, 255, 255, 0.03)",
+                              borderRadius: "12px",
+                              padding: "24px",
+                              fontSize: "0.95rem",
+                              color: "#cbd5e1",
+                              lineHeight: "1.7",
+                              whiteSpace: "pre-wrap",
+                              minHeight: "200px",
+                              maxHeight: "350px",
+                              overflowY: "auto",
+                            }}>
+                              {selectedMessage.message}
+                            </div>
+                          </div>
+
+                          <div style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            marginTop: "24px",
+                            borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+                            paddingTop: "20px"
+                          }}>
+                            <button
+                              onClick={() => handleToggleRead(selectedMessage._id, selectedMessage.read)}
+                              style={styles.btnSecondary}
+                            >
+                              Mark as {selectedMessage.read ? "Unread" : "Read"}
+                            </button>
+                            <button
+                              onClick={() => handleDeleteMessage(selectedMessage._id)}
+                              style={{
+                                ...styles.btnDelete,
+                                padding: "12px 24px",
+                                borderRadius: "30px",
+                              }}
+                            >
+                              Delete Message
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <div>
+                          <span style={{ fontSize: "2.5rem", color: "#3b82f6" }}>🗪</span>
+                          <h4 style={{ color: "#f8fafc", marginTop: "16px", fontSize: "1.05rem", fontWeight: "600" }}>No Message Selected</h4>
+                          <p style={{ color: "#64748b", fontSize: "0.85rem", marginTop: "6px" }}>Select a conversation from the left sidebar list to read the full body content.</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -1244,6 +1577,17 @@ const tabIcons = {
       <line x1="16" y1="17" x2="8" y2="17"></line>
     </svg>
   ),
+  contact: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+      <polyline points="22,6 12,13 2,6"></polyline>
+    </svg>
+  ),
+  messages: (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+  ),
   settings: (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <circle cx="12" cy="12" r="3"></circle>
@@ -1264,7 +1608,9 @@ const navigationGroups = [
     items: [
       { id: "hero", label: "Hero Banner", icon: tabIcons.hero },
       { id: "about", label: "About Bio", icon: tabIcons.about },
-      { id: "resume", label: "Resume Highlights", icon: tabIcons.resume },
+      { id: "resume", label: "Resume Details", icon: tabIcons.resume },
+      { id: "contact", label: "Contact Details", icon: tabIcons.contact },
+      { id: "messages", label: "Inbox Messages", icon: tabIcons.messages },
     ],
   },
   {

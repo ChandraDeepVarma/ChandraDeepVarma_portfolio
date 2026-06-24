@@ -332,6 +332,16 @@
       "6 industry certifications",
       "Contributions to open source projects",
       "Available as PDF, optimized for ATS"
-    ]
+    ],
+    "cvUrl": "#",
+    "viewUrl": "#"
+  },
+  "contact": {
+    "email": "namburichandradeep123@gmail.com",
+    "phone": "+1 (415) 555-0182",
+    "location": "San Francisco, CA · Remote-first",
+    "github": "#",
+    "linkedin": "#",
+    "twitter": "#"
   }
 }

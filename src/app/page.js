@@ -79,7 +79,7 @@ export default async function Home() {
       <CustomCursor />
       <Navbar initials={initials} />
       <main>
-        <Hero data={portfolioData.hero} />
+        <Hero data={{ ...portfolioData.hero, cvUrl: portfolioData.resume?.cvUrl || portfolioData.hero?.cvUrl }} />
         <div className="section-divider" />
         <About data={portfolioData.about} />
         <div className="section-divider" />
@@ -95,7 +95,7 @@ export default async function Home() {
         <div className="section-divider" />
         <Resume data={portfolioData.resume} />
         <div className="section-divider" />
-        <Contact data={portfolioData.hero} />
+        <Contact data={portfolioData.contact || portfolioData.hero} />
       </main>
       <Footer initials={initials} name={fullName} />
     </>

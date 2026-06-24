@@ -73,6 +73,7 @@ export default function Hero({ data }) {
             className="btn-secondary"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
+            download="Chandra_Deep_Varma_Resume.pdf"
           >
             ↓ Resume
           </a>

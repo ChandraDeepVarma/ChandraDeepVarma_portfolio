@@ -9,12 +9,51 @@ export default function Contact({ data }) {
     subject: "",
     message: "",
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState({ type: "", text: "" });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Replicate form submission action or show success
-    alert(`Thank you ${form.name || "there"}! Message sent successfully.`);
-    setForm({ name: "", email: "", subject: "", message: "" });
+    setSubmitting(true);
+    setStatus({ type: "", text: "" });
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        setStatus({
+          type: "success",
+          text: `Thank you, ${form.name}! Your message has been sent successfully.`,
+        });
+        setForm({ name: "", email: "", subject: "", message: "" });
+        
+        // Auto-dismiss success message after 6 seconds
+        setTimeout(() => {
+          setStatus((prev) => prev.type === "success" ? { type: "", text: "" } : prev);
+        }, 6000);
+      } else {
+        setStatus({
+          type: "error",
+          text: result.error || "Something went wrong. Please try again.",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus({
+        type: "error",
+        text: "Failed to connect to server. Please check your network connection.",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -51,13 +90,15 @@ export default function Contact({ data }) {
                   <div className="contact-item-value">{data.email}</div>
                 </div>
               </div>
-              <div className="contact-item">
-                <div className="contact-item-icon">☏</div>
-                <div>
-                  <div className="contact-item-label">Phone</div>
-                  <div className="contact-item-value">+1 (415) 555-0182</div>
+              {data.phone && (
+                <div className="contact-item">
+                  <div className="contact-item-icon">☏</div>
+                  <div>
+                    <div className="contact-item-label">Phone</div>
+                    <div className="contact-item-value">{data.phone}</div>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="contact-item">
                 <div className="contact-item-icon">◈</div>
                 <div>
@@ -72,16 +113,39 @@ export default function Contact({ data }) {
                   <div className="contact-item-value">{data.github}</div>
                 </div>
               </div>
-              <div className="contact-item">
-                <div className="contact-item-icon">◎</div>
-                <div>
-                  <div className="contact-item-label">Location</div>
-                  <div className="contact-item-value">San Francisco, CA · Remote-first</div>
+              {data.location && (
+                <div className="contact-item">
+                  <div className="contact-item-icon">◎</div>
+                  <div>
+                    <div className="contact-item-label">Location</div>
+                    <div className="contact-item-value">{data.location}</div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
           <form className="contact-form reveal reveal-delay-2" onSubmit={handleSubmit}>
+            {status.text && (
+              <div
+                style={{
+                  padding: "14px 20px",
+                  borderRadius: "8px",
+                  fontSize: "0.9rem",
+                  fontWeight: "600",
+                  marginBottom: "8px",
+                  border: "1px solid",
+                  backgroundColor: status.type === "success" ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)",
+                  borderColor: status.type === "success" ? "rgba(16, 185, 129, 0.25)" : "rgba(239, 68, 68, 0.25)",
+                  color: status.type === "success" ? "#34d399" : "#f87171",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+              >
+                <span>{status.type === "success" ? "✓" : "⚠"}</span>
+                <span>{status.text}</span>
+              </div>
+            )}
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="name">Name</label>
@@ -135,8 +199,34 @@ export default function Contact({ data }) {
                 required
               />
             </div>
-            <button type="submit" className="form-submit">
-              Send message →
+            <button
+              type="submit"
+              className="form-submit"
+              disabled={submitting}
+              style={{
+                opacity: submitting ? 0.8 : 1,
+                cursor: submitting ? "not-allowed" : "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+              }}
+            >
+              {submitting ? (
+                <>
+                  <span className="spinner-mini" style={{
+                    width: "14px",
+                    height: "14px",
+                    border: "2px solid rgba(255, 255, 255, 0.2)",
+                    borderTop: "2px solid #fff",
+                    borderRadius: "50%",
+                    animation: "spin 0.8s linear infinite",
+                    display: "inline-block",
+                  }}></span>
+                  Sending...
+                </>
+              ) : (
+                "Send message →"
+              )}
             </button>
           </form>
         </div>
